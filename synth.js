@@ -7,10 +7,14 @@ var synth = flock.synth({
   }
 });
 
-
 $('#f1').on("change mousemove", function() {
-    $(this).next().html($(this).val());
     synth.set( "testy.freq",$(this).val() * 2 + 200 );
+});
+
+$('input[type="range"]').each( function(index){
+   $(this).on("change mousemove", function(){
+     $(this).next().html($(this).val());
+   });
 });
 
 $('#onoff').on("change", function(){
@@ -21,27 +25,31 @@ $('#onoff').on("change", function(){
     }
 });
 
-
 var midiConnection = flock.midi.connection({
     openImmediately: true,
     ports: 0,
     listeners: {
         noteOn: function (msg) {
-	   synth.set("testy.mul", 1);
+    	   synth.set("testy.mul", 1);
         },
-        
         noteOff: function (msg) {
-            synth.set("testy.mul", 0);
+          synth.set("testy.mul", 0);
         },
-        
         control: function (msg) {
-          if (msg.number === 1){
-            $('#f1').val(msg.value).trigger("change");
+          switch(msg.number){
+            case 1:
+              $('#f1').val(msg.value).trigger("change");
+              break;
+            case 2:  
+              $('#f2').val(msg.value).trigger("change");
+              break;
+            case 3:  
+              $('#f2').val(msg.value).trigger("change");
+              break;
           }
         }
     }
 });
-
 
 $("document").ready(function(){
   $("#onoff").prop('checked', true).trigger("change");
