@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "HelloFlocking",
+  "description": "",
+  "version": "0.0.1",
+  "minimum_chrome_version": "23",
+  "icons": {
+    "16": "assets/Flocking_16.png",
+    "128": "assets/Flocking_128.png"
+  },
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  }
+}
