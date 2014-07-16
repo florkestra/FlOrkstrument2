@@ -98,20 +98,19 @@ var midiConnection = flock.midi.connection({
 });
 
 
-var oscMessageListener = function (oscMessage) {
-    $("#message").text(fluid.prettyPrintJSON(oscMessage));
-};
-
 var udpPort = new osc.UDPPort({
     localAddress: "0.0.0.0",
-    localPort: 57121
+    localPort: 57110
 });
 
 udpPort.on("ready", function () {
     $("#udpStatus").text("Listening for UDP on port " + udpPort.options.localPort);
 });
 
-udpPort.on("message", oscMessageListener);
+udpPort.on("message", function(message){
+  $("#message").html( fluid.prettyPrintJSON(message) );
+});
+
 udpPort.on("error", function (err) {
     throw new Error(err);
 });
