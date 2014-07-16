@@ -54,7 +54,7 @@ console.log(midi2Freq(60));
 
 var midiConnection = flock.midi.connection({
     openImmediately: true,
-    ports: {manufacturer: "AKAI"},
+    ports: 0,
     listeners: {
         noteOn: function (msg) {
          $('#midiDisplay').html( fluid.prettyPrintJSON(msg) );
@@ -96,6 +96,27 @@ var midiConnection = flock.midi.connection({
         }
     }
 });
+
+
+var oscMessageListener = function (oscMessage) {
+    $("#message").text(fluid.prettyPrintJSON(oscMessage));
+};
+
+var udpPort = new osc.UDPPort({
+    localAddress: "0.0.0.0",
+    localPort: 57121
+});
+
+udpPort.on("ready", function () {
+    $("#udpStatus").text("Listening for UDP on port " + udpPort.options.localPort);
+});
+
+udpPort.on("message", oscMessageListener);
+udpPort.on("error", function (err) {
+    throw new Error(err);
+});
+
+udpPort.open();
 
 $("document").ready(function(){
   $("#onoff").prop('checked', true).trigger("change");
