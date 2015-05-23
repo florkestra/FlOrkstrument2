@@ -8,7 +8,7 @@ var synth = flock.synth({
         density: 100,
         mul: 0.3,
         add: 0.4
-      }, 
+      },
   }
 });
 
@@ -48,13 +48,15 @@ $('#onoff').on("change", function(){
 
 
 function midi2Freq (num){
-  return Math.pow(2, (num-69)/12) * 440;    
+  return Math.pow(2, (num-69)/12) * 440;
 };
 console.log(midi2Freq(60));
 
 var midiConnection = flock.midi.connection({
     openImmediately: true,
-    ports: 0,
+    ports: {
+        input: "LPD8"
+    },  
     listeners: {
         noteOn: function (msg) {
          $('#midiDisplay').html( fluid.prettyPrintJSON(msg) );
@@ -66,30 +68,31 @@ var midiConnection = flock.midi.connection({
           synth.set("testy.mul", 0);
         },
         control: function (msg) {
+          console.log(msg);
          $('#midiDisplay').html( fluid.prettyPrintJSON(msg) );
           switch(msg.number){
             case 1:
               $('#f1').val(msg.value).trigger("change");
               break;
-            case 2:  
+            case 2:
               $('#f2').val(msg.value).trigger("change");
               break;
-            case 3:  
+            case 3:
               $('#f3').val(msg.value).trigger("change");
               break;
-            case 4:  
+            case 4:
               $('#f4').val(msg.value).trigger("change");
               break;
-            case 5:  
+            case 5:
               $('#f5').val(msg.value).trigger("change");
               break;
-            case 3:  
+            case 6:
               $('#f6').val(msg.value).trigger("change");
               break;
-            case 7:  
+            case 7:
               $('#f7').val(msg.value).trigger("change");
               break;
-            case 8:  
+            case 8:
               $('#f8').val(msg.value).trigger("change");
               break;
           }
@@ -100,10 +103,10 @@ var midiConnection = flock.midi.connection({
 
 var udpPort = new osc.UDPPort({
     localAddress: "0.0.0.0",
-    localPort: 57110
+    localPort: 3123
 });
 
-udpPort.on("ready", function () {
+udpPort.on("open", function () {
     $("#udpStatus").text("Listening for UDP on port " + udpPort.options.localPort);
 });
 
