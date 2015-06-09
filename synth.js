@@ -22,7 +22,6 @@ var dustyfreq = {
 
 $('#f1').on("change", function() {
     synth.set( "testy.freq",$(this).val() * 2 + 200 );
-    console.log("fadfadf");
 });
 
 $('#f2').on("change", function() {
@@ -49,8 +48,7 @@ $('#onoff').on("change", function(){
 
 function midi2Freq (num){
   return Math.pow(2, (num-69)/12) * 440;
-};
-console.log(midi2Freq(60));
+}
 
 var midiConnection = flock.midi.connection({
     openImmediately: true,
@@ -68,7 +66,7 @@ var midiConnection = flock.midi.connection({
           synth.set("testy.mul", 0);
         },
         control: function (msg) {
-          console.log(msg);
+          //console.log(msg);
          $('#midiDisplay').html( fluid.prettyPrintJSON(msg) );
           switch(msg.number){
             case 1:
